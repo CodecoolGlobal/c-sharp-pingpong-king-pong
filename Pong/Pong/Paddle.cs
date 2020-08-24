@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace Pong
 {
@@ -12,7 +13,9 @@ namespace Pong
         public int Height { get; set; }
         public int Width { get; set; }
 
-        public Position  { get; set; }
+        public Position Pos { get; set; }
+
+        
 
     }
 }

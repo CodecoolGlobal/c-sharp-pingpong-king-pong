@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Pong"
         mc:Ignorable="d"
         Title="PingPong" Height="450" Width="800">
-    <Grid>
+    <Canvas x:Name="GameArea" KeyDown="Canvas_KeyDown" Height="420" Width="800">
         <!--<Rectangle x:Name="Paddle" Fill="Black" Height="20" Width="150"></Rectangle>-->
-    </Grid>
+    </Canvas>
 </Window>
