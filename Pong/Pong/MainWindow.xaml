@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pong"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="PingPong" Height="450" Width="800">
     <Grid>
-        
+        <!--<Rectangle x:Name="Paddle" Fill="Black" Height="20" Width="150"></Rectangle>-->
     </Grid>
 </Window>
