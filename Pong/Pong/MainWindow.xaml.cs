@@ -22,13 +22,13 @@ namespace Pong
     public partial class MainWindow : Window
     {
         private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
-        private Element paddle = new Element{Position = new Point(525,300), Height=30, Width = 200};
-        private Element ball = new Element{Position = new Point(200,300), Height=20, Width = 20};
+        private Element paddle = new Element{Position = new Point(525,300), Height=15, Width = 150};
+        private Element ball = new Element{Position = new Point(100,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
         private SolidColorBrush ballColor = Brushes.Red;
-        private int BallStarterSpeed = 400;
-        private int xSpeed = 30;
-        private int ySpeed = 30;
+        private double BallStarterSpeed = 10;
+        private int xSpeed = 1;
+        private int ySpeed = 1;
 
 
         public MainWindow()
@@ -64,8 +64,9 @@ namespace Pong
                 Height = element.Height,
                 Fill = elementColor
             };
-            Canvas.SetTop(element.UiElement, element.Position.X);
-            Canvas.SetLeft(element.UiElement, element.Position.Y);
+            Canvas.SetLeft(element.UiElement, element.Position.X);
+            Canvas.SetTop(element.UiElement, element.Position.Y);
+            
             GameArea.Children.Add(element.UiElement);
 
 
@@ -79,10 +80,10 @@ namespace Pong
             switch(e.Key)
             {
                 case Key.Left:
-                    y -= distance;
+                    x -= distance;
                     break;
                 case Key.Right:
-                    y += distance;
+                    x += distance;
                     break;
             }
             GameArea.Children.Remove(paddle.UiElement);
@@ -97,20 +98,26 @@ namespace Pong
             double x = ball.Position.X + xSpeed;
             double y = ball.Position.Y + ySpeed;
             Console.WriteLine(x);
-      
-            if(x > GameArea.Height || (x < 0))
+                  
+            if (y == 535){
+            Console.WriteLine("ok");
+            }
+
+
+            if(x > GameArea.Width || (x < 0))
             { 
                 xSpeed = xSpeed * -1;
             }
-            if(y > GameArea.Width || (y < 0))
+            if(y > GameArea.Height || (y < 0))
             { 
                 ySpeed = ySpeed * -1;
             }
-                
+
+
             ball.Position = new Point(x,y);
             GameArea.Children.Remove(ball.UiElement);
-            drawElement(ball, ballColor);        
-
+            drawElement(ball, ballColor);       
+ 
         }
   
     }
