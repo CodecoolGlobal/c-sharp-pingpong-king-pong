@@ -50,13 +50,27 @@ namespace Pong
             Canvas.SetTop(paddle.UiElement, topAlign);
             Canvas.SetLeft(paddle.UiElement, leftAlign);
             GameArea.Children.Add(paddle.UiElement);
+
+            GameArea.Focus();
+            GameArea.KeyDown += Canvas_KeyDown;
             
        }
 
+        public void Canvas_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch(e.Key)
+            {
+                case Key.Left:
+                    Console.WriteLine("!");
+                    break;
+                case Key.Right:
+                    break;
+            }
+        }
+
         private void movePaddle(Rect paddleUI)
         {
-
-
+            
         }
 
 
