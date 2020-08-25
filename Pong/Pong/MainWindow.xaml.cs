@@ -21,29 +21,40 @@ namespace Pong
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
         private Element paddle = new Element{Position = new Point(380,300), Height=30, Width = 200};
         private Element ball = new Element{Position = new Point(0,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
         private SolidColorBrush ballColor = Brushes.Red;
+        private int BallStarterSpeed = 400;
 
 
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext= paddle;
-            drawElement(paddle, paddleColor);
-            drawElement(ball, ballColor);
-            GameArea.Focus();
-            GameArea.KeyDown += Canvas_KeyDown;
-
+            StartGame();
+            gameTickTimer.Tick += GameTickTimer_Tick;
 
         }
 
 
+        private void StartGame(){
+            drawElement(paddle, paddleColor);
+            drawElement(ball, ballColor);
+            gameTickTimer.Interval = TimeSpan.FromMilliseconds(BallStarterSpeed);
+            gameTickTimer.IsEnabled = true;
+            GameArea.Focus();
+            GameArea.KeyDown += Canvas_KeyDown;
+           
+        }
+
+       private void GameTickTimer_Tick(object sender, EventArgs e)
+        {
+             moveBall(ball);
+        }
 
 
-       private void drawElement(Element element, SolidColorBrush elementColor)
+        private void drawElement(Element element, SolidColorBrush elementColor)
         {
             element.UiElement = new Rectangle()
             {
@@ -79,7 +90,15 @@ namespace Pong
         }
 
        
-
+        private void moveBall(Element ball)
+        {
+            double x = ball.Position.X;
+            double y = ball.Position.Y;
+            y--;
+            ball.Position = new Point(x,y);
+            GameArea.Children.Remove(ball.UiElement);
+            drawElement(ball, ballColor);
+        }
        
 
 
