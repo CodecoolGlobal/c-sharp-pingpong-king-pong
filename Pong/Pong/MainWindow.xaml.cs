@@ -22,7 +22,7 @@ namespace Pong
     public partial class MainWindow : Window
     {
         private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
-        private Element paddle = new Element{Position = new Point(525,300), Height=15, Width = 150};
+        private Element paddle = new Element{Position = new Point(400,500), Height=15, Width = 150};
         private Element ball = new Element{Position = new Point(100,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
         private SolidColorBrush ballColor = Brushes.Red;
@@ -74,7 +74,7 @@ namespace Pong
 
         public void Canvas_KeyDown(object sender, KeyEventArgs e)
         {
-            int distance = 40;
+            int distance = 30;
             double y = paddle.Position.Y; 
             double x = paddle.Position.X;
             switch(e.Key)
@@ -112,6 +112,23 @@ namespace Pong
             { 
                 ySpeed = ySpeed * -1;
             }
+
+            if(x > paddle.Position.X && x <paddle.Position.X + paddle.Width)
+            {
+                if(y > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
+                {
+                    if(x > paddle.Width /2)
+                    {
+                        ySpeed = ySpeed * - 1;
+                    }   
+                    if(x < paddle.Width /2)
+                    {
+                        xSpeed = xSpeed * - 1;
+                    }
+                }
+    
+            }
+
 
 
             ball.Position = new Point(x,y);
