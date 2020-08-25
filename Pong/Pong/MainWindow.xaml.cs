@@ -35,10 +35,7 @@ namespace Pong
             this.DataContext= paddle;
             drawPaddle(paddle);
             
-            
-
-
-           
+          
         }
 
        private void drawPaddle(Paddle paddle){
@@ -72,6 +69,7 @@ namespace Pong
                     direction = PaddleDirection.Left;
                     break;
                 case Key.Right:
+                    direction = PaddleDirection.Right;
                     break;
             }
         }
