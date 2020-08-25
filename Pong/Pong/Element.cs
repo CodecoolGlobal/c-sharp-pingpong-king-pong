@@ -9,7 +9,7 @@ using System.Windows.Shapes;
 
 namespace Pong
 {
-    class Paddle
+    class Element
     {
        
         public UIElement UiElement{get;set;}

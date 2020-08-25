@@ -22,38 +22,38 @@ namespace Pong
     public partial class MainWindow : Window
     {
 
-        //Paddle paddle = new Paddle { Height = 30, Width = 200, Pos = new Position { X = 500, Y = 300 } };
-        private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
-        private Paddle paddle = new Paddle{Position = new Point(380,300), Height=30, Width = 200};
+        private Element paddle = new Element{Position = new Point(380,300), Height=30, Width = 200};
+        private Element ball = new Element{Position = new Point(0,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
-        enum PaddleDirection {Left, Right};
-        private PaddleDirection  direction= PaddleDirection.Left;
+        private SolidColorBrush ballColor = Brushes.Red;
 
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext= paddle;
-            drawPaddle(paddle);
+            drawElement(paddle, paddleColor);
+            drawElement(ball, ballColor);
             GameArea.Focus();
             GameArea.KeyDown += Canvas_KeyDown;
-            
-            
+
+
         }
 
 
 
 
-       private void drawPaddle(Paddle paddle){
-            paddle.UiElement = new Rectangle()
+       private void drawElement(Element element, SolidColorBrush elementColor)
+        {
+            element.UiElement = new Rectangle()
             {
-                Width = paddle.Width,
-                Height = paddle.Height,
-                Fill = paddleColor
+                Width = element.Width,
+                Height = element.Height,
+                Fill = elementColor
             };
-            Canvas.SetTop(paddle.UiElement, paddle.Position.X);
-            Canvas.SetLeft(paddle.UiElement, paddle.Position.Y);
-            GameArea.Children.Add(paddle.UiElement);
+            Canvas.SetTop(element.UiElement, element.Position.X);
+            Canvas.SetLeft(element.UiElement, element.Position.Y);
+            GameArea.Children.Add(element.UiElement);
 
 
        }
@@ -75,7 +75,7 @@ namespace Pong
             GameArea.Children.Remove(paddle.UiElement);
             paddle.Position = new Point(x, y);
 
-            drawPaddle(paddle);
+            drawElement(paddle, paddleColor);
         }
 
        
