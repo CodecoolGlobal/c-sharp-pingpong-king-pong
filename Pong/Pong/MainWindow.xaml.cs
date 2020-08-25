@@ -22,11 +22,13 @@ namespace Pong
     public partial class MainWindow : Window
     {
         private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
-        private Element paddle = new Element{Position = new Point(380,300), Height=30, Width = 200};
-        private Element ball = new Element{Position = new Point(0,300), Height=20, Width = 20};
+        private Element paddle = new Element{Position = new Point(525,300), Height=30, Width = 200};
+        private Element ball = new Element{Position = new Point(200,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
         private SolidColorBrush ballColor = Brushes.Red;
         private int BallStarterSpeed = 400;
+        private int xSpeed = 30;
+        private int ySpeed = 30;
 
 
         public MainWindow()
@@ -50,7 +52,7 @@ namespace Pong
 
        private void GameTickTimer_Tick(object sender, EventArgs e)
         {
-             moveBall(ball);
+              moveBall(ball);
         }
 
 
@@ -92,16 +94,24 @@ namespace Pong
        
         private void moveBall(Element ball)
         {
-            double x = ball.Position.X;
-            double y = ball.Position.Y;
-            y--;
+            double x = ball.Position.X + xSpeed;
+            double y = ball.Position.Y + ySpeed;
+            Console.WriteLine(x);
+      
+            if(x > GameArea.Height || (x < 0))
+            { 
+                xSpeed = xSpeed * -1;
+            }
+            if(y > GameArea.Width || (y < 0))
+            { 
+                ySpeed = ySpeed * -1;
+            }
+                
             ball.Position = new Point(x,y);
             GameArea.Children.Remove(ball.UiElement);
-            drawElement(ball, ballColor);
+            drawElement(ball, ballColor);        
+
         }
-       
-
-
-        
+  
     }
 }

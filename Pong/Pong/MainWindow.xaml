@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pong"
         mc:Ignorable="d"
-        Title="PingPong" Height="450" Width="800" ResizeMode="NoResize">
+        Title="PingPong" Height="600" Width="800" ResizeMode="NoResize">
     <Border BorderBrush="Black" BorderThickness="5">
-    <Canvas x:Name="GameArea"  Height="420" Width="800" KeyDown="Canvas_KeyDown" Focusable="True" ClipToBounds="True">
-        <!--<Rectangle x:Name="Paddle" Fill="Black" Height="20" Width="150"></Rectangle>-->
-    </Canvas>
+        <Canvas x:Name="GameArea"  Height="595" Width="795" KeyDown="Canvas_KeyDown" Focusable="True" ClipToBounds="True">
+
+        </Canvas>
     </Border>
 </Window>
