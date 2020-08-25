@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pong"
         mc:Ignorable="d"
-        Title="PingPong" Height="450" Width="800">
+        Title="PingPong" Height="450" Width="800" >
     <Canvas x:Name="GameArea"  Height="420" Width="800" KeyDown="Canvas_KeyDown" Focusable="True">
         <!--<Rectangle x:Name="Paddle" Fill="Black" Height="20" Width="150"></Rectangle>-->
     </Canvas>

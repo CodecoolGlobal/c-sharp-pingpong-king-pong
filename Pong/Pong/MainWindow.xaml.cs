@@ -23,7 +23,8 @@ namespace Pong
     {
 
         //Paddle paddle = new Paddle { Height = 30, Width = 200, Pos = new Position { X = 500, Y = 300 } };
-        private Paddle paddle = new Paddle{Position = new Point(500,300), Height=30, Width = 200};
+        private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
+        private Paddle paddle = new Paddle{Position = new Point(380,300), Height=30, Width = 200};
         private SolidColorBrush paddleColor = Brushes.Gold;
         enum PaddleDirection {Left, Right};
         private PaddleDirection  direction= PaddleDirection.Left;
@@ -34,9 +35,14 @@ namespace Pong
             InitializeComponent();
             this.DataContext= paddle;
             drawPaddle(paddle);
+            GameArea.Focus();
+            GameArea.KeyDown += Canvas_KeyDown;
             
-          
+            
         }
+
+
+
 
        private void drawPaddle(Paddle paddle){
             paddle.UiElement = new Rectangle()
@@ -45,47 +51,38 @@ namespace Pong
                 Height = paddle.Height,
                 Fill = paddleColor
             };
-            double leftAlign = (GameArea.Width - paddle.Width) / 2;
-            double topAlign = GameArea.Height - paddle.Height;
-            Canvas.SetTop(paddle.UiElement, topAlign);
-            Canvas.SetLeft(paddle.UiElement, leftAlign);
+            Canvas.SetTop(paddle.UiElement, paddle.Position.X);
+            Canvas.SetLeft(paddle.UiElement, paddle.Position.Y);
             GameArea.Children.Add(paddle.UiElement);
 
-            GameArea.Focus();
-            GameArea.KeyDown += Canvas_KeyDown;
-            
+
        }
 
         public void Canvas_KeyDown(object sender, KeyEventArgs e)
         {
+            int distance = 40;
+            double y = paddle.Position.Y; 
+            double x = paddle.Position.X;
             switch(e.Key)
             {
                 case Key.Left:
-                    Console.WriteLine("!");
+                    y -= distance;
                     break;
                 case Key.Right:
+                    y += distance;
                     break;
             }
+            GameArea.Children.Remove(paddle.UiElement);
+            paddle.Position = new Point(x, y);
+
+            drawPaddle(paddle);
         }
 
-        private void movePaddle(Rect paddleUI)
-        {
-            
-        }
+       
+
+       
 
 
-
-        private void Canvas_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.Key)
-            {
-                case Key.Left:
-                    direction = PaddleDirection.Left;
-                    break;
-                case Key.Right:
-                    direction = PaddleDirection.Right;
-                    break;
-            }
-        }
+        
     }
 }
