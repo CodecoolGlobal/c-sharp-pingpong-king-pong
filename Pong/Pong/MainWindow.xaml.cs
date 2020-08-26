@@ -29,6 +29,8 @@ namespace Pong
         private double timeInterval = 10;
         private int xSpeed = 3;
         private int ySpeed = 3;
+        private int currentScore;  
+
 
         public MainWindow()
         {
@@ -39,6 +41,7 @@ namespace Pong
         }
 
         private void StartGame(){
+            currentScore = 0;
             drawElement(paddle, paddleColor);
             drawElement(ball, ballColor);
             gameTickTimer.Interval = TimeSpan.FromMilliseconds(timeInterval);
@@ -125,6 +128,7 @@ namespace Pong
                 if(y + ball.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
                 {
                     ySpeed = ySpeed * -1;
+                    UpdateScore();
 
                     // Right paddle
                     if(x > paddle.Position.X + (paddle.Width / 2))
@@ -149,5 +153,32 @@ namespace Pong
             GameArea.Children.Remove(ball.UiElement);
             drawElement(ball, ballColor);
          }
+
+
+        private void UpdateScore() 
+        {
+            currentScore++;
+            this.ScoreDisplay.Text = currentScore.ToString();
+        }
+
+        private void UpdateLevel()
+        {
+            this.LevelDisplay.Text = timeInterval.ToString();
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void ShowScorePopup()
+        {
+            MessageBox.Show($"Congratulations! You reached {currentScore} points");
+        }
     }
 }
