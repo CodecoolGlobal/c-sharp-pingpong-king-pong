@@ -81,6 +81,7 @@ namespace Pong
                     x += distance;
                     break;
             }
+
             GameArea.Children.Remove(paddle.UiElement);
             paddle.Position = new Point(x, y);
 
@@ -91,24 +92,20 @@ namespace Pong
         {
             double x = ball.Position.X + xSpeed;
             double y = ball.Position.Y + ySpeed;
-            Console.WriteLine(x);
-                  
-            if (y == 535){
-            Console.WriteLine("ok");
-            }
 
-            if(x > GameArea.Width || (x < 0))
+            if(x + ball.Width > GameArea.Width || (x < 0))
             { 
                 xSpeed = xSpeed * -1;
             }
-            if(y > GameArea.Height || (y < 0))
+
+            if(y + ball.Height > GameArea.Height || (y < 0))
             { 
                 ySpeed = ySpeed * -1;
             }
 
-            if(x > paddle.Position.X && x <paddle.Position.X + paddle.Width)
+            if(x + ball.Width > paddle.Position.X && x <paddle.Position.X + paddle.Width)
             {
-                if(y > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
+                if(y + ball.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
                 {
                     ySpeed = ySpeed * - 1;
                     // Right paddle
