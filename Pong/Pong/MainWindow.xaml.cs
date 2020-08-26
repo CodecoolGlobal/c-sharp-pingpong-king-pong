@@ -35,7 +35,6 @@ namespace Pong
             InitializeComponent();
             StartGame();
             gameTickTimer.Tick += GameTickTimer_Tick;
-
         }
 
         private void StartGame(){
@@ -149,5 +148,29 @@ namespace Pong
             GameArea.Children.Remove(ball.UiElement);
             drawElement(ball, ballColor);
          }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                btnMessageBoxWithDefaultChoice_Click(sender, e);
+            } else if (e.Key == Key.Space)
+            {
+                // TODO
+            }
+        }
+
+        private void btnMessageBoxWithDefaultChoice_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure to quit from the best game ever?", "Quit", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    Environment.Exit(0);
+                    break;
+                case MessageBoxResult.No:
+                    return;
+            }
+        }
     }
 }
