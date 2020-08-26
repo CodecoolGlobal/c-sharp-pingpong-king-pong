@@ -26,10 +26,9 @@ namespace Pong
         private Element ball = new Element{Position = new Point(100,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
         private SolidColorBrush ballColor = Brushes.Red;
-        private double BallStarterSpeed = 10;
-        private int xSpeed = 1;
-        private int ySpeed = 1;
-
+        private double timeInterval = 10;
+        private int xSpeed = 3;
+        private int ySpeed = 3;
 
         public MainWindow()
         {
@@ -39,22 +38,19 @@ namespace Pong
 
         }
 
-
         private void StartGame(){
             drawElement(paddle, paddleColor);
             drawElement(ball, ballColor);
-            gameTickTimer.Interval = TimeSpan.FromMilliseconds(BallStarterSpeed);
+            gameTickTimer.Interval = TimeSpan.FromMilliseconds(timeInterval);
             gameTickTimer.IsEnabled = true;
             GameArea.Focus();
             GameArea.KeyDown += Canvas_KeyDown;
-           
         }
 
        private void GameTickTimer_Tick(object sender, EventArgs e)
         {
               moveBall(ball);
         }
-
 
         private void drawElement(Element element, SolidColorBrush elementColor)
         {
@@ -68,7 +64,6 @@ namespace Pong
             Canvas.SetTop(element.UiElement, element.Position.Y);
             
             GameArea.Children.Add(element.UiElement);
-
 
        }
 
@@ -92,7 +87,6 @@ namespace Pong
             drawElement(paddle, paddleColor);
         }
 
-       
         private void moveBall(Element ball)
         {
             double x = ball.Position.X + xSpeed;
@@ -102,7 +96,6 @@ namespace Pong
             if (y == 535){
             Console.WriteLine("ok");
             }
-
 
             if(x > GameArea.Width || (x < 0))
             { 
@@ -117,25 +110,29 @@ namespace Pong
             {
                 if(y > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
                 {
-                    if(x > paddle.Width /2)
+                    ySpeed = ySpeed * - 1;
+                    // Right paddle
+                    if(x > paddle.Position.X + (paddle.Width / 2))
                     {
-                        ySpeed = ySpeed * - 1;
-                    }   
-                    if(x < paddle.Width /2)
+                        if (xSpeed < 0)
+                        {
+                            xSpeed *= - 1;
+                        }
+                    }
+                    // Left paddle
+                    if(x < paddle.Position.X + (paddle.Width / 2))
                     {
-                        xSpeed = xSpeed * - 1;
+                        if (xSpeed > 0) 
+                        {
+                            xSpeed *= - 1;
+                        }
                     }
                 }
-    
             }
-
-
 
             ball.Position = new Point(x,y);
             GameArea.Children.Remove(ball.UiElement);
             drawElement(ball, ballColor);       
- 
-        }
-  
+         }
     }
 }
