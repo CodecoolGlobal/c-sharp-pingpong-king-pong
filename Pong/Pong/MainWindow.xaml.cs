@@ -33,12 +33,15 @@ namespace Pong
         private int xSpeed = 3;
         private int ySpeed = 3;
         private bool paused = false;
+        private DispatcherTimer globalTimer;
+        private const int MAX_TIME_IN_SECONDS = 180;
 
         public MainWindow()
         {
             InitializeComponent();
             StartGame();
             gameTickTimer.Tick += GameTickTimer_Tick;
+            timeProgressBar.Maximum = MAX_TIME_IN_SECONDS;
         }
 
         private void StartGame(){
@@ -155,24 +158,21 @@ namespace Pong
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-/*            if (e.Key == Key.Escape)
-            {
-                btnMessageBoxWithDefaultChoice_Click(sender, e);
-            } else if (e.Key == Key.Space)
-            {
-                pauseGame(gameTickTimer);
-            }*/
-
             switch (e.Key)
             {
                 case Key.Escape:
-                    StopScreen();
+                    if (!paused)
+                    {
+                        StopScreen();
+                    }
                     btnMessageBoxWithDefaultChoice_Click(sender, e);
                     StopScreen();
+                    pauseMessage.Visibility = TogglePauseMessage();
                     break;
+
                 case Key.Space:
                     StopScreen();
-                    TogglePauseMessage();
+                    pauseMessage.Visibility = TogglePauseMessage();
                     break;
             }
         }
@@ -185,20 +185,15 @@ namespace Pong
                 case MessageBoxResult.Yes:
                     Environment.Exit(0);
                     break;
+
                 case MessageBoxResult.No:
                     return;
             }
         }
 
-        private void TogglePauseMessage()
+        private Visibility TogglePauseMessage()
         {
-            if (pauseMessage.Visibility == Visibility.Hidden)
-            {
-                pauseMessage.Visibility = Visibility.Visible;
-            } else
-            {
-                pauseMessage.Visibility = Visibility.Hidden;
-            }
+            return pauseMessage.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void StopScreen()
@@ -207,11 +202,30 @@ namespace Pong
             {
                 paused = false;
                 gameTickTimer.Start();
+                globalTimer.Start();
             }
             else
             {
                 paused = true;
                 gameTickTimer.Stop();
+                globalTimer.Stop();
+            }
+        }
+
+        private void ProgressBar_Loaded(object sender, RoutedEventArgs e)
+        {
+            globalTimer = new DispatcherTimer();
+            globalTimer.Interval = new TimeSpan(0, 0, 1);
+            globalTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            globalTimer.Start();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            timeProgressBar.Value += 1;
+            if (timeProgressBar.Value >= 180)
+            {
+                globalTimer.Stop();
             }
         }
     }

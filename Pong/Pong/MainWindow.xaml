@@ -9,6 +9,7 @@
     <Border BorderBrush="Black" BorderThickness="5">
         <Canvas x:Name="GameArea"  Height="600" Width="776" KeyDown="Canvas_KeyDown" Focusable="True" ClipToBounds="True">
             <TextBlock x:Name="pauseMessage" Foreground ="Aquamarine" Canvas.Left="159" TextWrapping="Wrap" Text="Press SPACE to continue" Canvas.Top="186" Height="184" Width="425" TextAlignment="Center" FontSize="40" Visibility="Hidden"/>
+            <ProgressBar x:Name="timeProgressBar" Height="10" Canvas.Left="666" Canvas.Top="10" Width="100" Loaded="ProgressBar_Loaded"/>
         </Canvas>
     </Border>
 </Window>
