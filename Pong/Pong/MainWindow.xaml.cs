@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Pong
 {
@@ -29,6 +32,7 @@ namespace Pong
         private double timeInterval = 10;
         private int xSpeed = 3;
         private int ySpeed = 3;
+        private bool paused = false;
 
         public MainWindow()
         {
@@ -74,13 +78,13 @@ namespace Pong
             switch(e.Key)
             {
                 case Key.Left:
-                    if (x >= 0)
+                    if (x >= 0 && !paused)
                     {
                         x -= distance;
                     }
                     break;
                 case Key.Right:
-                    if (x + paddle.Width <= GameArea.Width)
+                    if (x + paddle.Width <= GameArea.Width && !paused)
                     {
                         x += distance;
                     }
@@ -156,7 +160,7 @@ namespace Pong
                 btnMessageBoxWithDefaultChoice_Click(sender, e);
             } else if (e.Key == Key.Space)
             {
-                // TODO
+                pauseGame(gameTickTimer);
             }
         }
 
@@ -170,6 +174,19 @@ namespace Pong
                     break;
                 case MessageBoxResult.No:
                     return;
+            }
+        }
+
+        private void pauseGame(DispatcherTimer timer)
+        {
+            if (paused)
+            {
+                paused = false;
+                timer.Start();
+            } else
+            {
+                paused = true;
+                timer.Stop();
             }
         }
     }
