@@ -94,13 +94,25 @@ namespace Pong
             double y = ball.Position.Y + ySpeed;
 
             if(x + ball.Width > GameArea.Width || (x < 0))
-            { 
-                xSpeed = xSpeed * -1;
+            {
+                xSpeed *= - 1;
             }
 
-            if(y + ball.Height > GameArea.Height || (y < 0))
-            { 
-                ySpeed = ySpeed * -1;
+            if (y <= 0)
+            {
+                ySpeed *= - 1;
+
+            }
+
+            if (y >= GameArea.Height)
+            {
+                GameArea.Children.Remove(ball.UiElement);
+
+                Random random = new Random();
+
+                ball.Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 1), (double)0);
+                drawElement(ball, ballColor);
+                return;
             }
 
             if(x + ball.Width > paddle.Position.X && x <paddle.Position.X + paddle.Width)
@@ -129,7 +141,7 @@ namespace Pong
 
             ball.Position = new Point(x,y);
             GameArea.Children.Remove(ball.UiElement);
-            drawElement(ball, ballColor);       
+            drawElement(ball, ballColor);
          }
     }
 }
