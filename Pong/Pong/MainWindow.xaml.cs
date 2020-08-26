@@ -155,18 +155,31 @@ namespace Pong
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+/*            if (e.Key == Key.Escape)
             {
                 btnMessageBoxWithDefaultChoice_Click(sender, e);
             } else if (e.Key == Key.Space)
             {
                 pauseGame(gameTickTimer);
+            }*/
+
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    StopScreen();
+                    btnMessageBoxWithDefaultChoice_Click(sender, e);
+                    StopScreen();
+                    break;
+                case Key.Space:
+                    StopScreen();
+                    TogglePauseMessage();
+                    break;
             }
         }
 
         private void btnMessageBoxWithDefaultChoice_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure to quit from the best game ever?", "Quit", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to quit the game?", "Quit", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
             switch (result)
             {
                 case MessageBoxResult.Yes:
@@ -177,16 +190,28 @@ namespace Pong
             }
         }
 
-        private void pauseGame(DispatcherTimer timer)
+        private void TogglePauseMessage()
+        {
+            if (pauseMessage.Visibility == Visibility.Hidden)
+            {
+                pauseMessage.Visibility = Visibility.Visible;
+            } else
+            {
+                pauseMessage.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void StopScreen()
         {
             if (paused)
             {
                 paused = false;
-                timer.Start();
-            } else
+                gameTickTimer.Start();
+            }
+            else
             {
                 paused = true;
-                timer.Stop();
+                gameTickTimer.Stop();
             }
         }
     }
