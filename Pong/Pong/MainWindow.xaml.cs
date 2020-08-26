@@ -22,7 +22,7 @@ namespace Pong
     public partial class MainWindow : Window
     {
         private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
-        private Element paddle = new Element{Position = new Point(400,500), Height=15, Width = 150};
+        private Element paddle = new Element{Position = new Point(400,500), Height=15, Width = 160};
         private Element ball = new Element{Position = new Point(100,300), Height=20, Width = 20};
         private SolidColorBrush paddleColor = Brushes.Gold;
         private SolidColorBrush ballColor = Brushes.Red;
@@ -69,16 +69,22 @@ namespace Pong
 
         public void Canvas_KeyDown(object sender, KeyEventArgs e)
         {
-            int distance = 30;
+            int distance = 10;
             double y = paddle.Position.Y; 
             double x = paddle.Position.X;
             switch(e.Key)
             {
                 case Key.Left:
-                    x -= distance;
+                    if (x >= 0)
+                    {
+                        x -= distance;
+                    }
                     break;
                 case Key.Right:
-                    x += distance;
+                    if (x + paddle.Width <= GameArea.Width)
+                    {
+                        x += distance;
+                    }
                     break;
             }
 
@@ -95,13 +101,12 @@ namespace Pong
 
             if(x + ball.Width > GameArea.Width || (x < 0))
             {
-                xSpeed *= - 1;
+                xSpeed *= -1;
             }
 
             if (y <= 0)
             {
-                ySpeed *= - 1;
-
+                ySpeed *= -1;
             }
 
             if (y >= GameArea.Height)
@@ -119,13 +124,14 @@ namespace Pong
             {
                 if(y + ball.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
                 {
-                    ySpeed = ySpeed * - 1;
+                    ySpeed = ySpeed * -1;
+
                     // Right paddle
                     if(x > paddle.Position.X + (paddle.Width / 2))
                     {
                         if (xSpeed < 0)
                         {
-                            xSpeed *= - 1;
+                            xSpeed *= -1;
                         }
                     }
                     // Left paddle
@@ -133,7 +139,7 @@ namespace Pong
                     {
                         if (xSpeed > 0) 
                         {
-                            xSpeed *= - 1;
+                            xSpeed *= -1;
                         }
                     }
                 }

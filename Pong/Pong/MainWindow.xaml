@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="PingPong" Height="600" Width="800" ResizeMode="NoResize">
     <Border BorderBrush="Black" BorderThickness="5">
-        <Canvas x:Name="GameArea"  Height="560" Width="760" KeyDown="Canvas_KeyDown" Focusable="True" ClipToBounds="True">
+        <Canvas x:Name="GameArea"  Height="600" Width="776" KeyDown="Canvas_KeyDown" Focusable="True" ClipToBounds="True">
         </Canvas>
     </Border>
 </Window>
