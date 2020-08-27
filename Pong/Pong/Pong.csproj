@@ -63,6 +63,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Gems\SpeederGem.cs" />
+    <Compile Include="Gems\SlowerGem.cs" />
+    <Compile Include="Gems\ExtenderGem.cs" />
+    <Compile Include="Gems\ShortenerGem.cs" />
+    <Compile Include="Gems\Gem.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
