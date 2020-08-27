@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Shapes;
+using System.Windows.Media;
 
-namespace Pong
+namespace Pong.Gems
 {
-    class Element
+    abstract class Gem : Element
     {
         private int _xSpeed;
         private int _ySpeed;
-       
+        private SolidColorBrush color;
 
-
-        public UIElement UiElement{get;set;}
-        public Point Position { get; set; }
-
-        public int Height { get; set; }
-        public int Width { get; set; }
-        //public Position Pos { get; set; }
+        public SolidColorBrush Color
+        {
+            get
+            {
+                return color;
+            }
+            set
+            {
+                color = value;
+            }
+        }
 
         public int XSpeed
         {
@@ -49,5 +52,13 @@ namespace Pong
 
 
 
+
+
+
+
+
+
+
+        public abstract void Changer(Element paddle);
     }
 }
