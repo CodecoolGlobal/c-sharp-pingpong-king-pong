@@ -284,7 +284,7 @@ namespace Pong
             ball.Position = new Point(x,y);
             GameArea.Children.Remove(ball.UiElement);
             drawElement(ball, ballColor);
-         }
+        }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -333,12 +333,14 @@ namespace Pong
                 paused = false;
                 gameTickTimer.Start();
                 globalTimer.Start();
+                gemTimer.Start();
             }
             else
             {
                 paused = true;
                 gameTickTimer.Stop();
                 globalTimer.Stop();
+                gemTimer.Stop();
             }
         }
 
@@ -357,7 +359,7 @@ namespace Pong
             {
                 globalTimer.Stop();
             }
-	}
+	    }
 
         private void UpdateScore() 
         {

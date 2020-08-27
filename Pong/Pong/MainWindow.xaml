@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pong"
         mc:Ignorable="d"
-        Title="PingPong" Height="600" Width="800" ResizeMode="NoResize" WindowStyle="None" MouseDown="Window_MouseDown">
+        Title="PingPong" Height="600" Width="800" ResizeMode="NoResize" WindowStyle="None" MouseDown="Window_MouseDown" KeyDown="Window_KeyDown">
 	<DockPanel>
 		<Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
