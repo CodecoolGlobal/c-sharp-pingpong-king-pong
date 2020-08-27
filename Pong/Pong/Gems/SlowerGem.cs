@@ -10,8 +10,8 @@ namespace Pong.Gems
     {
         public override void Changer(Element ball)
         {
-            ball.XSpeed++;
-            ball.YSpeed++;
+            ball.XSpeed--;
+            ball.YSpeed--;
         }
     }
 }
