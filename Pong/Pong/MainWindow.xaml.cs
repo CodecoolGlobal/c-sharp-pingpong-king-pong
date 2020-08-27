@@ -48,6 +48,7 @@ namespace Pong
         private DispatcherTimer globalTimer;
         private const int MAX_TIME_IN_SECONDS = 180;
         private int currentScore;
+        private string currentLevel = "easy";
 
 
         public void GemRegister()
@@ -86,7 +87,7 @@ namespace Pong
         public MainWindow()
         {
             InitializeComponent();
-            StartGame();
+            //StartGame();
 
         }
 
@@ -391,7 +392,7 @@ namespace Pong
 
         private void UpdateLevel()
         {
-            this.LevelDisplay.Text = timeInterval.ToString();
+            this.LevelDisplay.Text = currentLevel;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -418,6 +419,32 @@ namespace Pong
                     Application.Current.Shutdown();
                     return;
             }
+        }
+
+        private void levelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            switch ((sender as Button).Name)
+            {
+                case "medBtn":
+                    ball.XSpeed = 4;
+                    ball.YSpeed = 4;
+                    currentLevel = "medium";
+                    break;
+                case "diffBtn":
+                    ball.XSpeed = 5;
+                    ball.YSpeed = 5;
+                    currentLevel = "difficult";
+                    break;
+            }
+            WelcomePopup.Visibility = Visibility.Collapsed;
+            StartGame();
+            UpdateLevel();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            WelcomePopup.Visibility = Visibility.Visible;
+
         }
     }
 }

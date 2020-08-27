@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pong"
         mc:Ignorable="d"
-        Title="PingPong" Height="600" Width="800" ResizeMode="NoResize" WindowStyle="None" MouseDown="Window_MouseDown" KeyDown="Window_KeyDown">
+        Title="PingPong" Height="600" Width="800" ResizeMode="NoResize" WindowStyle="None" MouseDown="Window_MouseDown" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
 	<DockPanel>
 		<Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
@@ -37,6 +37,12 @@
 		<Canvas x:Name="GameArea"  Background="Black" Height="600" Width="790" KeyDown="Canvas_KeyDown" Focusable="True" ClipToBounds="True">
             	    <TextBlock x:Name="pauseMessage" Foreground ="Aquamarine" Canvas.Left="159" TextWrapping="Wrap" Text="Press SPACE to continue" Canvas.Top="186" Height="184" Width="425" TextAlignment="Center" FontSize="40" Visibility="Hidden"/>
             	    <ProgressBar x:Name="timeProgressBar" Height="10" Canvas.Left="666" Canvas.Top="10" Width="100" Loaded="ProgressBar_Loaded"/>
-		</Canvas>
+            <StackPanel x:Name="WelcomePopup" Width="350" Background="Aqua" Canvas.Left="247" Canvas.Top="39" >
+                <TextBlock FontFamily="Consolas" FontWeight="Bold" FontSize="24">Welcome to PingPong Game! <LineBreak/> Chose a level:</TextBlock>
+                <Button x:Name="easyBtn" Click="levelBtn_Click" FontFamily="Consolas" FontWeight="Bold" FontSize="24" Background="White">Easy</Button>
+                <Button x:Name="medBtn" Click="levelBtn_Click" FontFamily="Consolas" FontWeight="Bold" FontSize="24" Background="White">Medium</Button>
+                <Button x:Name="diffBtn" Click="levelBtn_Click" FontFamily="Consolas" FontWeight="Bold" FontSize="24" Background="White">Difficult</Button>
+            </StackPanel>
+        </Canvas>
 	</DockPanel>
 </Window>
