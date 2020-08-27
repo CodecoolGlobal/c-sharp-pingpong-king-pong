@@ -368,7 +368,7 @@ namespace Pong
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             timeProgressBar.Value += 1;
-            if (timeProgressBar.Value >= 10)
+            if (timeProgressBar.Value >= 180)
             {
                 globalTimer.Stop();
                 ShowScorePopup();
@@ -398,6 +398,7 @@ namespace Pong
 
         private void ShowScorePopup()
         {
+            StopScreen();
             var result = MessageBox.Show($"Congratulations! You reached {currentScore} points. Would you like to play again?", "Game Over", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             switch (result)
             {
