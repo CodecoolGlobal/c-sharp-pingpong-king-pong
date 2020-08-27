@@ -39,14 +39,18 @@ namespace Pong
         private List<Gem> gemList = new List<Gem>();
         private System.Windows.Threading.DispatcherTimer gemTimer = new System.Windows.Threading.DispatcherTimer();
         private Gem gem = null;
+        private bool stopTImerForGem = false;
+        private int numRangeStarter = 3000;
+        private int numRangeEnder = 7000;
+
 
         public void GemRegister()
         {
   
-            ShortenerGem gem1 = new ShortenerGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 20), Height = 5, Width = 5, XSpeed = 3, YSpeed = 3, Color = Brushes.Gray };
-            ExtenderGem gem2 = new ExtenderGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 20), Height = 5, Width = 5,XSpeed = 4, YSpeed = 4, Color = Brushes.Red };
-            SlowerGem gem3 = new SlowerGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 20), Height = 5, Width = 5, YSpeed = 2, Color = Brushes.Green };
-            SpeederGem gem4 = new SpeederGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 20), Height = 5, Width = 5, YSpeed = 3, Color = Brushes.Aqua};
+            ShortenerGem gem1 = new ShortenerGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5, XSpeed = 3, YSpeed = 3, Color = Brushes.Gray };
+            ExtenderGem gem2 = new ExtenderGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5,XSpeed = 4, YSpeed = 4, Color = Brushes.Red };
+            SlowerGem gem3 = new SlowerGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5, YSpeed = 2, Color = Brushes.Green };
+            SpeederGem gem4 = new SpeederGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5, YSpeed = 3, Color = Brushes.Aqua};
 
             gemList.Add(gem1);
             gemList.Add(gem2);
@@ -58,7 +62,8 @@ namespace Pong
                 {
                     Width = gem.Width,
                     Height = gem.Height,
-                    Fill = gem.Color
+                    Fill = gem.Color,
+                    Visibility = Visibility.Collapsed
                 };
             }
 
@@ -67,7 +72,7 @@ namespace Pong
           
             Canvas.SetLeft(gem.UiElement, gem.Position.X);
             Canvas.SetTop(gem.UiElement, gem.Position.Y);
-            //GameArea.Children.Add(gem.UiElement);
+            GameArea.Children.Add(gem.UiElement);
             
         }  
        
@@ -117,7 +122,8 @@ namespace Pong
             {
                 Width = element.Width,
                 Height = element.Height,
-                Fill = elementColor
+                Fill = elementColor,
+                
             };
             Canvas.SetLeft(element.UiElement, element.Position.X);
             Canvas.SetTop(element.UiElement, element.Position.Y);
@@ -154,19 +160,36 @@ namespace Pong
         }
 
 
-        private void GemTimer(object sender, EventArgs e)
+        private async void GemTimer(object sender, EventArgs e)
         {
             moveGem();
+            if (stopTImerForGem)
+            {
+                gemTimer.IsEnabled = false;
+                int randomNumber = random.Next(numRangeStarter,numRangeEnder);
+                
+                await Task.Delay(randomNumber);
+                gem.UiElement.Visibility = Visibility.Visible;
+                gemTimer.IsEnabled = true;
+                stopTImerForGem = false;
+            }
+            
+
+
         }
 
 
-        private async void drawGem()
-        {
-
-        }
+        
 
         private void moveGem()
         {
+
+
+            if (gem.Position.Y == 0)
+            {
+                stopTImerForGem = true;
+
+            }
            
             double x = gem.Position.X;
             double y = gem.Position.Y + gem.YSpeed;
@@ -202,6 +225,10 @@ namespace Pong
                 Canvas.SetLeft(gem.UiElement, gem.Position.X);
                 Canvas.SetTop(gem.UiElement, gem.Position.Y);
                 GameArea.Children.Add(gem.UiElement);
+                if (gem.UiElement.Visibility == Visibility.Visible)
+                {
+                    gem.UiElement.Visibility = Visibility.Collapsed;
+                }
 
                 //GameArea.Children.Remove(gem.UiElement);
                 //gem.Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 1), (double)0);
