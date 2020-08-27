@@ -172,20 +172,20 @@ namespace Pong
             double y = gem.Position.Y + gem.YSpeed;
 
 
-            //if(x + gem.Width > paddle.Position.X && x < paddle.Position.X + paddle.Width)
-            //{
-            //    if (y + gem.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
-            //    {
-            //        if(gem.GetType().Name == "ExtenderGem" || gem.GetType().Name == "ShortenerGem")
-            //        {
-            //            gem.Changer(paddle);
-            //        }
-            //        else
-            //        {
-            //            gem.Changer(ball);
-            //        }
-            //    }
-            //}
+            if (x + gem.Width > paddle.Position.X && x < paddle.Position.X + paddle.Width)
+            {
+                if (y + gem.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
+                {
+                    if (gem.GetType().Name == "ExtenderGem" || gem.GetType().Name == "ShortenerGem")
+                    {
+                        gem.Changer(paddle);
+                    }
+                    else
+                    {
+                        gem.Changer(ball);
+                    }
+                }
+            }
 
 
             if (gem.Position.Y >= GameArea.Height)
@@ -355,9 +355,10 @@ namespace Pong
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             timeProgressBar.Value += 1;
-            if (timeProgressBar.Value >= 180)
+            if (timeProgressBar.Value >= 10)
             {
                 globalTimer.Stop();
+                ShowScorePopup();
             }
 	    }
 
@@ -384,7 +385,18 @@ namespace Pong
 
         private void ShowScorePopup()
         {
-            MessageBox.Show($"Congratulations! You reached {currentScore} points");
+            var result = MessageBox.Show($"Congratulations! You reached {currentScore} points. Would you like to play again?", "Game Over", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+            switch (result)
+            {
+                case MessageBoxResult.No:
+                    this.Close();
+                    break;
+
+                case MessageBoxResult.Yes:
+                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                    Application.Current.Shutdown();
+                    return;
+            }
         }
     }
 }
