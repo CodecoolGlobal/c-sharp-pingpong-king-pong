@@ -76,7 +76,6 @@ namespace Pong
 
             gem = getGem();
             drawGem();
-            
         }  
        
   
@@ -87,8 +86,6 @@ namespace Pong
         public MainWindow()
         {
             InitializeComponent();
-            //StartGame();
-
         }
 
 
@@ -165,7 +162,6 @@ namespace Pong
 
 
 
-
         private async void GemTimer(object sender, EventArgs e)
         {
             moveGem();
@@ -193,7 +189,6 @@ namespace Pong
         {
             double x = gem.Position.X;
             double y = gem.Position.Y + gem.YSpeed;
-
 
 
             if (gem.Position.Y == 0)
@@ -256,21 +251,17 @@ namespace Pong
 
             if(x + ball.Width > GameArea.Width || (x < 0))
             {
-                //xSpeed *= -1;
                 ball.XSpeed *= -1;
             }
 
             if (y <= 0)
             {
-                //ySpeed *= -1;
                 ball.YSpeed *= -1;
             }
 
             if (y >= GameArea.Height)
             {
                 GameArea.Children.Remove(ball.UiElement);
-
-                //Random random = new Random();
 
                 ball.Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 1), (double)0);
                 drawElement(ball, ballColor);
@@ -444,7 +435,6 @@ namespace Pong
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             WelcomePopup.Visibility = Visibility.Visible;
-
         }
     }
 }
