@@ -42,6 +42,12 @@ namespace Pong
         private bool stopTImerForGem = false;
         private int numRangeStarter = 3000;
         private int numRangeEnder = 7000;
+        private bool underInfluence = false;
+
+        private bool paused = false;
+        private DispatcherTimer globalTimer;
+        private const int MAX_TIME_IN_SECONDS = 180;
+        private int currentScore;
 
 
         public void GemRegister()
@@ -67,70 +73,45 @@ namespace Pong
                 };
             }
 
-            int index = random.Next(gemList.Count);
-            gem = gemList[index];
-          
-            Canvas.SetLeft(gem.UiElement, gem.Position.X);
-            Canvas.SetTop(gem.UiElement, gem.Position.Y);
-            GameArea.Children.Add(gem.UiElement);
+            gem = getGem();
+            drawGem();
             
         }  
        
-        private int xSpeed = 3;
-        private int ySpeed = 3;
-        private bool paused = false;
-        private DispatcherTimer globalTimer;
-        private const int MAX_TIME_IN_SECONDS = 180;
-	private int currentScore;
+  
+
+	
+        
 
         public MainWindow()
         {
             InitializeComponent();
             StartGame();
+
+        }
+
+
+        public void InitializeTimers()
+        {
             gameTickTimer.Tick += GameTickTimer_Tick;
-	    timeProgressBar.Maximum = MAX_TIME_IN_SECONDS;
+            timeProgressBar.Maximum = MAX_TIME_IN_SECONDS;
             gemTimer.Tick += GemTimer;
+            gameTickTimer.Interval = TimeSpan.FromMilliseconds(timeInterval);
+            gameTickTimer.IsEnabled = true;
+            gemTimer.Interval = TimeSpan.FromMilliseconds(timeInterval);
+            gemTimer.IsEnabled = true;
+
         }
 
         private void StartGame(){
             currentScore = 0;
             drawElement(paddle, paddleColor);
             drawElement(ball, ballColor);
-
             GemRegister();
-
-            gameTickTimer.Interval = TimeSpan.FromMilliseconds(timeInterval);
-            gameTickTimer.IsEnabled = true;
-
-            gemTimer.Interval = TimeSpan.FromMilliseconds(timeInterval);
-            gemTimer.IsEnabled = true;
-
-
+            InitializeTimers();
             GameArea.Focus();
             GameArea.KeyDown += Canvas_KeyDown;
         }
-
-       
-       private void GameTickTimer_Tick(object sender, EventArgs e)
-        {
-             moveBall(ball);
-        }
-
-        private void drawElement(Element element, SolidColorBrush elementColor)
-        {
-            element.UiElement = new Rectangle()
-            {
-                Width = element.Width,
-                Height = element.Height,
-                Fill = elementColor,
-                
-            };
-            Canvas.SetLeft(element.UiElement, element.Position.X);
-            Canvas.SetTop(element.UiElement, element.Position.Y);
-            
-            GameArea.Children.Add(element.UiElement);
-
-       }
 
         public void Canvas_KeyDown(object sender, KeyEventArgs e)
         {
@@ -159,6 +140,30 @@ namespace Pong
             drawElement(paddle, paddleColor);
         }
 
+        private void drawElement(Element element, SolidColorBrush elementColor)
+        {
+            element.UiElement = new Rectangle()
+            {
+                Width = element.Width,
+                Height = element.Height,
+                Fill = elementColor,
+
+            };
+            Canvas.SetLeft(element.UiElement, element.Position.X);
+            Canvas.SetTop(element.UiElement, element.Position.Y);
+
+            GameArea.Children.Add(element.UiElement);
+
+        }
+
+
+        private void GameTickTimer_Tick(object sender, EventArgs e)
+        {
+             moveBall(ball);
+        }
+
+
+
 
         private async void GemTimer(object sender, EventArgs e)
         {
@@ -167,33 +172,34 @@ namespace Pong
             {
                 gemTimer.IsEnabled = false;
                 int randomNumber = random.Next(numRangeStarter,numRangeEnder);
-                
                 await Task.Delay(randomNumber);
                 gem.UiElement.Visibility = Visibility.Visible;
                 gemTimer.IsEnabled = true;
                 stopTImerForGem = false;
             }
-            
-
-
         }
 
+        private Gem getGem()
+        {
+            int randomIndex = random.Next(gemList.Count);
+            return gemList[randomIndex];
+        }
 
+    
         
 
         private void moveGem()
         {
+            double x = gem.Position.X;
+            double y = gem.Position.Y + gem.YSpeed;
+
 
 
             if (gem.Position.Y == 0)
             {
                 stopTImerForGem = true;
-
             }
            
-            double x = gem.Position.X;
-            double y = gem.Position.Y + gem.YSpeed;
-
 
             if (x + gem.Width > paddle.Position.X && x < paddle.Position.X + paddle.Width)
             {
@@ -214,45 +220,33 @@ namespace Pong
             if (gem.Position.Y >= GameArea.Height)
             {
 
-                //var parentObject = VisualTreeHelper.GetParent(gem.UiElement);
-
-                
                 GameArea.Children.Remove(gem.UiElement);
 
-                int randomIndex = random.Next(gemList.Count);
-                gem = gemList[randomIndex];
+                gem = getGem();
                 gem.Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 1), (double)0);
-                Canvas.SetLeft(gem.UiElement, gem.Position.X);
-                Canvas.SetTop(gem.UiElement, gem.Position.Y);
-                GameArea.Children.Add(gem.UiElement);
+                drawGem();
                 if (gem.UiElement.Visibility == Visibility.Visible)
                 {
                     gem.UiElement.Visibility = Visibility.Collapsed;
                 }
-
-                //GameArea.Children.Remove(gem.UiElement);
-                //gem.Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 1), (double)0);
-                //Canvas.SetLeft(gem.UiElement, gem.Position.X);
-                //Canvas.SetTop(gem.UiElement, gem.Position.Y);
-                //GameArea.Children.Add(gem.UiElement);
-                //return;
-
+                //gem.UiElement.Visibility =  gem.UiElement.Visibility == Visibility.Visible ? Visibility.Collapsed: Visibility.Visible;
             }
             else
+
             {
-                gem.Position = new Point(x, y);
                 GameArea.Children.Remove(gem.UiElement);
-                Canvas.SetLeft(gem.UiElement, gem.Position.X);
-                Canvas.SetTop(gem.UiElement, gem.Position.Y);
-                GameArea.Children.Add(gem.UiElement);
+                gem.Position = new Point(x, y);
+                drawGem();
             }
-
-    
-
         }
 
 
-
+        public void drawGem()
+        {
+            Canvas.SetLeft(gem.UiElement, gem.Position.X);
+            Canvas.SetTop(gem.UiElement, gem.Position.Y);
+            GameArea.Children.Add(gem.UiElement);
+        }
 
         private void moveBall(Element ball)
         {
