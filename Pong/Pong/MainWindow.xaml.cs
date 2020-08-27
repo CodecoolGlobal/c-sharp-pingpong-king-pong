@@ -190,6 +190,8 @@ namespace Pong
             double x = gem.Position.X;
             double y = gem.Position.Y + gem.YSpeed;
 
+            
+
 
             if (gem.Position.Y == 0)
             {
@@ -293,7 +295,7 @@ namespace Pong
                     }
                 }
             }
-
+            
             ball.Position = new Point(x,y);
             GameArea.Children.Remove(ball.UiElement);
             drawElement(ball, ballColor);

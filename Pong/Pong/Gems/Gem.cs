@@ -13,6 +13,20 @@ namespace Pong.Gems
         private int _xSpeed;
         private int _ySpeed;
         private SolidColorBrush color;
+        private bool influenceOn = false;
+
+
+        public bool InfluenceOn
+        {
+            get
+            {
+                return influenceOn;
+            }
+            set
+            {
+                influenceOn = value;
+            }
+        }
 
         public SolidColorBrush Color
         {
@@ -50,7 +64,7 @@ namespace Pong.Gems
             }
         }
 
-
+        
 
 
 
