@@ -16,7 +16,7 @@ namespace Pong
        
 
 
-        public UIElement UiElement{get;set;}
+        public Rectangle UiElement{get;set;}
         public Point Position { get; set; }
 
         public int Height { get; set; }

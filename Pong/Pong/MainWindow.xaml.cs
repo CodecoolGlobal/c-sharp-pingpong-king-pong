@@ -48,7 +48,7 @@ namespace Pong
         private DispatcherTimer globalTimer;
         private const int MAX_TIME_IN_SECONDS = 180;
         private int currentScore;
-        private string currentLevel = "easy";
+        private string currentLevel = "easy"; // should be enum!!
 
 
         public void GemRegister()
@@ -78,11 +78,6 @@ namespace Pong
             drawGem();
         }  
        
-  
-
-	
-        
-
         public MainWindow()
         {
             InitializeComponent();
@@ -145,11 +140,9 @@ namespace Pong
                 Width = element.Width,
                 Height = element.Height,
                 Fill = elementColor,
-
             };
             Canvas.SetLeft(element.UiElement, element.Position.X);
             Canvas.SetTop(element.UiElement, element.Position.Y);
-
             GameArea.Children.Add(element.UiElement);
 
         }
@@ -201,7 +194,7 @@ namespace Pong
             {
                 if (y + gem.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
                 {
-                    if (gem.GetType().Name == "ExtenderGem" || gem.GetType().Name == "ShortenerGem")
+                    if (gem.GetType() == typeof(ExtenderGem) || gem.GetType().Name == "ShortenerGem")
                     {
                         gem.Changer(paddle);
                     }
@@ -225,7 +218,6 @@ namespace Pong
                 {
                     gem.UiElement.Visibility = Visibility.Collapsed;
                 }
-                //gem.UiElement.Visibility =  gem.UiElement.Visibility == Visibility.Visible ? Visibility.Collapsed: Visibility.Visible;
             }
             else
 
@@ -268,6 +260,7 @@ namespace Pong
                 return;
             }
 
+            //should be a helper method
             if(x + ball.Width > paddle.Position.X && x <paddle.Position.X + paddle.Width)
             {
                 if(y + ball.Height > paddle.Position.Y && y < paddle.Position.Y + paddle.Height)
