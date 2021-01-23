@@ -27,31 +27,27 @@ namespace Pong
     /// </summary>
     public partial class MainWindow : Window
     {
-        Random random = new Random();
-        private System.Windows.Threading.DispatcherTimer gameTickTimer = new System.Windows.Threading.DispatcherTimer();
-        private Element paddle = new Element {Position = new Point(400, 500), Height = 15, Width = 160 };
-        private Element ball = new Element { Position = new Point(100, 300), Height = 20, Width = 20, XSpeed = 3, YSpeed = 3};
-        private SolidColorBrush paddleColor = Brushes.Gold;
-        private SolidColorBrush ballColor = Brushes.Red;
-        private double timeInterval = 10;
+        Random random;
+        private System.Windows.Threading.DispatcherTimer gameTickTimer;
+        private Element paddle;
+        private Element ball;
+        private SolidColorBrush paddleColor;
+        private SolidColorBrush ballColor;
+        private double timeInterval;
+        private List<Gem> gemList;
+        private System.Windows.Threading.DispatcherTimer gemTimer;
+        private Gem gem;
+        private bool stopTImerForGem;
+        private int numRangeStarter;
+        private int numRangeEnder;
 
-       
-        private List<Gem> gemList = new List<Gem>();
-        private System.Windows.Threading.DispatcherTimer gemTimer = new System.Windows.Threading.DispatcherTimer();
-        private Gem gem = null;
-        private bool stopTImerForGem = false;
-        private int numRangeStarter = 3000;
-        private int numRangeEnder = 7000;
-        private bool underInfluence = false;
-
-        private bool paused = false;
+        private bool paused;
         private DispatcherTimer globalTimer;
         private const int MAX_TIME_IN_SECONDS = 180;
         private int currentScore;
-        private string currentLevel = "easy"; // should be enum!!
+        private string currentLevel = "easy";
 
-
-        public int _life;
+        private bool permissionKeyDown;
 
         public void GemRegister()
         {
@@ -87,6 +83,9 @@ namespace Pong
 
         public void InitializeTimers()
         {
+            gameTickTimer.Start();
+            globalTimer.Start();
+            gemTimer.Start();
             gameTickTimer.Tick += GameTickTimer_Tick;
             timeProgressBar.Maximum = MAX_TIME_IN_SECONDS;
             gemTimer.Tick += GemTimer;
@@ -98,39 +97,64 @@ namespace Pong
         }
 
         private void StartGame(){
+            //new stuff added
+            random = new Random();
+            gameTickTimer = new System.Windows.Threading.DispatcherTimer(); 
+            paddle = new Element { Position = new Point(400, 500), Height = 15, Width = 160 };
+            ball = new Element { Position = new Point(100, 300), Height = 20, Width = 20, XSpeed = 3, YSpeed = 3 };
+            paddleColor = Brushes.Gold;
+            ballColor = Brushes.Red;
+            timeInterval = 10;
+            gemList = new List<Gem>();
+            gemTimer = new System.Windows.Threading.DispatcherTimer();
+            Gem gem = null;
+            stopTImerForGem = false;
+            numRangeStarter = 3000;
+            numRangeEnder = 7000;
+            paused = false;
+
+
+            //old stuff
             currentScore = 0;
             drawElement(paddle, paddleColor);
             drawElement(ball, ballColor);
             GemRegister();
             InitializeTimers();
             GameArea.Focus();
+            permissionKeyDown = true;
             GameArea.KeyDown += Canvas_KeyDown;
+            GameArea.Loaded += ProgressBar_Loaded;
         }
 
         public void Canvas_KeyDown(object sender, KeyEventArgs e)
         {
-            int distance = 10;
-            double y = paddle.Position.Y; 
-            double x = paddle.Position.X;
-            switch(e.Key)
+            if (permissionKeyDown)
             {
-                case Key.Left:
-                    if (x >= 0 && !paused)
-                    {
-                        x -= distance;
-                    }
-                    break;
-                case Key.Right:
-                    if (x + paddle.Width <= GameArea.Width && !paused)
-                    {
-                        x += distance;
-                    }
-                    break;
+                int distance = 10;
+                double y = paddle.Position.Y;
+                double x = paddle.Position.X;
+                switch (e.Key)
+                {
+                    case Key.Left:
+                        if (x >= 0 && !paused)
+                        {
+                            x -= distance;
+                        }
+                        break;
+                    case Key.Right:
+                        if (x + paddle.Width <= GameArea.Width && !paused)
+                        {
+                            x += distance;
+                        }
+                        break;
+                }
+
+                GameArea.Children.Remove(paddle.UiElement);
+                paddle.Position = new Point(x, y);
+                drawElement(paddle, paddleColor);
             }
 
-            GameArea.Children.Remove(paddle.UiElement);
-            paddle.Position = new Point(x, y);
-            drawElement(paddle, paddleColor);
+            
         }
 
         private void drawElement(Element element, SolidColorBrush elementColor)
@@ -355,11 +379,16 @@ namespace Pong
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            timeProgressBar.Value += 10;
+            timeProgressBar.Value += 60;
             if (timeProgressBar.Value >= 180)
             {
+                permissionKeyDown = false;
+                //gemTimer.Stop();
+                gemTimer.Tick -= GemTimer;
                 globalTimer.Stop();
+                gameTickTimer.Stop();
                 ShowScorePopup();
+                timeProgressBar.Value = 0;
             }
 	    }
 
@@ -386,18 +415,16 @@ namespace Pong
 
         private void Restart()
         {
-
-            StopScreen();
             GameArea.Children.Remove(ball.UiElement);
-            GameArea.Children.Remove(gem.UiElement);
             GameArea.Children.Remove(paddle.UiElement);
+            GameArea.Children.Remove(gem.UiElement);
             WelcomePopup.Visibility = Visibility.Visible;
             
         }
 
         private void ShowScorePopup()
         {
-            StopScreen();
+
             var result = MessageBox.Show($"Congratulations! You reached {currentScore} points. Would you like to play again?", "Game Over", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
             switch (result)
             {
@@ -406,8 +433,6 @@ namespace Pong
                     break;
 
                 case MessageBoxResult.Yes:
-                    //    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                    //    Application.Current.Shutdown();
                     Restart();
                     break;
                     
