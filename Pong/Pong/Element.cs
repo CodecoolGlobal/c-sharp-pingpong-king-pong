@@ -13,15 +13,10 @@ namespace Pong
     {
         private int _xSpeed;
         private int _ySpeed;
-       
-
-
         public Rectangle UiElement{get;set;}
         public Point Position { get; set; }
-
         public int Height { get; set; }
         public int Width { get; set; }
-        //public Position Pos { get; set; }
 
         public int XSpeed
         {
@@ -46,8 +41,5 @@ namespace Pong
                 _ySpeed = value;
             }
         }
-
-
-
     }
 }

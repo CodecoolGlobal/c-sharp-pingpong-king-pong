@@ -51,9 +51,10 @@ namespace Pong
         private string currentLevel = "easy"; // should be enum!!
 
 
+        public int _life;
+
         public void GemRegister()
         {
-  
             ShortenerGem gem1 = new ShortenerGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5, XSpeed = 3, YSpeed = 3, Color = Brushes.Gray };
             ExtenderGem gem2 = new ExtenderGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5,XSpeed = 4, YSpeed = 4, Color = Brushes.Red };
             SlowerGem gem3 = new SlowerGem { Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 5), 0), Height = 5, Width = 5, YSpeed = 2, Color = Brushes.Green };
@@ -129,7 +130,6 @@ namespace Pong
 
             GameArea.Children.Remove(paddle.UiElement);
             paddle.Position = new Point(x, y);
-
             drawElement(paddle, paddleColor);
         }
 
@@ -144,7 +144,6 @@ namespace Pong
             Canvas.SetLeft(element.UiElement, element.Position.X);
             Canvas.SetTop(element.UiElement, element.Position.Y);
             GameArea.Children.Add(element.UiElement);
-
         }
 
 
@@ -175,16 +174,11 @@ namespace Pong
             return gemList[randomIndex];
         }
 
-    
-        
 
         private void moveGem()
         {
             double x = gem.Position.X;
             double y = gem.Position.Y + gem.YSpeed;
-
-            
-
 
             if (gem.Position.Y == 0)
             {
@@ -256,7 +250,6 @@ namespace Pong
             if (y >= GameArea.Height)
             {
                 GameArea.Children.Remove(ball.UiElement);
-
                 ball.Position = new Point((double)random.Next(0 + 1, (int)GameArea.Width - 1), (double)0);
                 drawElement(ball, ballColor);
                 return;
@@ -362,7 +355,7 @@ namespace Pong
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            timeProgressBar.Value += 1;
+            timeProgressBar.Value += 10;
             if (timeProgressBar.Value >= 180)
             {
                 globalTimer.Stop();
@@ -391,6 +384,17 @@ namespace Pong
             this.DragMove();
         }
 
+        private void Restart()
+        {
+
+            StopScreen();
+            GameArea.Children.Remove(ball.UiElement);
+            GameArea.Children.Remove(gem.UiElement);
+            GameArea.Children.Remove(paddle.UiElement);
+            WelcomePopup.Visibility = Visibility.Visible;
+            
+        }
+
         private void ShowScorePopup()
         {
             StopScreen();
@@ -402,11 +406,15 @@ namespace Pong
                     break;
 
                 case MessageBoxResult.Yes:
-                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                    return;
+                    //    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                    //    Application.Current.Shutdown();
+                    Restart();
+                    break;
+                    
             }
         }
+
+
 
         private void levelBtn_Click(object sender, RoutedEventArgs e)
         {
